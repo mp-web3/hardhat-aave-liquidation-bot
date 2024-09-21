@@ -12,8 +12,18 @@ https://thegraph.com/
 ## Install Packages (Updated)
 
 ```
-yarn add --dev @chainlink/contracts@^0.3.1 @nomicfoundation/hardhat-chai-matchers@^2.0.0 @nomicfoundation/hardhat-ethers@npm:hardhat-deploy-ethers @nomicfoundation/hardhat-network-helpers@^1.0.0 @nomicfoundation/hardhat-verify@^2.0.0 @nomiclabs/hardhat-ethers@^2.2.3 @nomiclabs/hardhat-solhint@^4.0.1 @nomiclabs/hardhat-waffle@^2.0.6 @typechain/ethers-v6@^0.5.0 @typechain/hardhat@^9.0.0 @types/sinon-chai@^3.2.3 chai@^4.2.0 dotenv@^16.4.5 ethereum-waffle@^3.0.0 ethers@^5.0.0 hardhat@^2.22.10 hardhat-deploy@^0.12.4 hardhat-gas-reporter@^1.0.8 prettier@^3.3.3 prettier-plugin-solidity@^1.4.1 solidity-coverage@^0.8.0 typechain@^8.3.0 hardhat-contract-sizer
+yarn add --dev @chainlink/contracts@1.2.0 @nomicfoundation/hardhat-chai-matchers@^2.0.0 @nomicfoundation/hardhat-ethers@npm:hardhat-deploy-ethers @nomicfoundation/hardhat-network-helpers@^1.0.0 @nomicfoundation/hardhat-verify@^2.0.0 @nomiclabs/hardhat-ethers@^2.2.3 @nomiclabs/hardhat-solhint@^4.0.1 @nomiclabs/hardhat-waffle@^2.0.6 @typechain/ethers-v6@^0.5.0 @typechain/hardhat@^9.0.0 @types/sinon-chai@^3.2.3 chai@^4.2.0 dotenv@^16.4.5 ethereum-waffle@^3.0.0 ethers@^5.0.0 hardhat@^2.22.10 hardhat-deploy@^0.12.4 hardhat-gas-reporter@^1.0.8 prettier@^3.3.3 prettier-plugin-solidity@^1.4.1 solidity-coverage@^0.8.0 typechain@^8.3.0 hardhat-contract-sizer
 ```
+
+### Chainlink contracts package
+
+@chainlink/contracts@1.2.0
+
+We will need to copy the 2 mock contracts VRFv2_5Consumer and VRFCoordinatorV2_5Mock
+
+Create a `mock` folder inside the `contracts` folder and create 2 new files with the names of the contracts.
+
+To obtain the mocks go to: https://docs.chain.link/vrf/v2-5/subscription/test-locally
 
 ## Data Structures
 
@@ -94,3 +104,23 @@ Indexed parameters are also known as <b>topics</b>
 Indexed parameters or topics are much easier to search and query than non-indexed paramenters
 
 The non-indexed parameters are encoded in the ABI. That's why are more complex to read. You need tha ABI associated with the contract.
+
+## Introduction to Chainlink VRF (Randomness in Web3)
+
+Chainlink VRF v2.5 docs: https://docs.chain.link/vrf
+Video explanation 1: https://www.youtube.com/watch?v=eRzLNfn4LGc
+Video Explanation 2: https://youtu.be/gyMwXuJrbJQ?si=UXGhxBgMG9t-KnBb&t=50588
+
+Local test explained: https://docs.chain.link/vrf/v2-5/subscription/test-locally
+
+### Testing logic
+
+Complete the following tasks to test your VRF v2.5 consumer locally:
+
+1. Deploy the VRFCoordinatorV2_5Mock. This contract is a mock of the VRFCoordinatorV2_5 contract.
+2. Call the createSubscription function (which VRFCoordinatorV2_5Mock inherits) to create a new subscription.
+3. Call the VRFCoordinatorV2_5Mock fundSubscription function to fund your newly created subscription. Note: You can fund with an arbitrary amount.
+4. Deploy your VRF consumer contract.
+5. Call the addConsumer function (which VRFCoordinatorV2_5Mock inherits) to add your consumer contract to your subscription.
+6. Request random words from your consumer contract.
+   Call the VRFCoordinatorV2_5Mock fulfillRandomWords function to fulfill your consumer contract request.

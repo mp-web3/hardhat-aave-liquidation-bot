@@ -33,11 +33,17 @@ contract Raffle {
         emit RaffleEnter(msg.sender);
     }
 
+    function pickRandomWinner() external {
+        // Request the random number
+        // Once we get it do something with it
+        // It is a 2 transaction process
+    }
+
     function getEntranceFee() public view returns (uint256) {
         return i_entranceFee;
     }
 
-    function getPlayer(uint256 index) public view returns (address payable) {
+    function getPlayer(uint256 index) public view returns (address) {
         return s_players[index];
     }
 }

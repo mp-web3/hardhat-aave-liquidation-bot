@@ -6,7 +6,7 @@
   "author": "mp-web3 <mp.web3.t@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@chainlink/contracts": "^0.3.1",
+    "@chainlink/contracts": "1.2.0",
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
     "@nomicfoundation/hardhat-ethers": "npm:hardhat-deploy-ethers",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
