@@ -124,3 +124,7 @@ Complete the following tasks to test your VRF v2.5 consumer locally:
 5. Call the addConsumer function (which VRFCoordinatorV2_5Mock inherits) to add your consumer contract to your subscription.
 6. Request random words from your consumer contract.
    Call the VRFCoordinatorV2_5Mock fulfillRandomWords function to fulfill your consumer contract request.
+
+Try testing locally.
+
+You can get the test here https://github.com/smartcontractkit/hardhat-starter-kit/blob/main/test/unit/RandomNumberConsumer.spec.js
