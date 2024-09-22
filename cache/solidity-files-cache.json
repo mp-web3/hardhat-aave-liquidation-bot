@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/contracts/Raffle.sol": {
-      "lastModificationDate": 1726937372654,
-      "contentHash": "25264361a33e5f1cc93ea46cdebf39d3",
+      "lastModificationDate": 1726991673325,
+      "contentHash": "d6226e6c720789e16f91b14a5eeb7f1f",
       "sourceName": "contracts/Raffle.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -35,7 +35,10 @@
           }
         }
       },
-      "imports": [],
+      "imports": [
+        "@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol",
+        "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol"
+      ],
       "versionPragmas": [
         "^0.8.7"
       ],
@@ -741,10 +744,10 @@
         "RandomNumberConsumerV2_5"
       ]
     },
-    "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/contracts/RandomNumberConsumerV2Plus.sol": {
-      "lastModificationDate": 1726944174556,
+    "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/contracts/mocks/RandomNumberConsumerV2Plus.sol": {
+      "lastModificationDate": 1726983738551,
       "contentHash": "8394f680b084fc7506a9e871579a1a81",
-      "sourceName": "contracts/RandomNumberConsumerV2Plus.sol",
+      "sourceName": "contracts/mocks/RandomNumberConsumerV2Plus.sol",
       "solcConfig": {
         "version": "0.8.19",
         "settings": {

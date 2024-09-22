@@ -4,6 +4,8 @@ smartcontractkit link: https://github.com/PatrickAlphaC/hardhat-smartcontract-lo
 
 Code link Patrick: https://github.com/smartcontractkit/full-blockchain-solidity-course-js?tab=readme-ov-file#lesson-9-hardhat-smart-contract-lottery
 
+Subscriptions ChainLink VRF: https://vrf.chain.link/
+
 ### Important!
 
 The moralis integration has been removed. Please use the the graph integration instead.
@@ -14,6 +16,57 @@ https://thegraph.com/
 ```
 yarn add --dev @chainlink/contracts@1.2.0 @nomicfoundation/hardhat-chai-matchers@^2.0.0 @nomicfoundation/hardhat-ethers@npm:hardhat-deploy-ethers @nomicfoundation/hardhat-network-helpers@^1.0.0 @nomicfoundation/hardhat-verify@^2.0.0 @nomiclabs/hardhat-ethers@^2.2.3 @nomiclabs/hardhat-solhint@^4.0.1 @nomiclabs/hardhat-waffle@^2.0.6 @typechain/ethers-v6@^0.5.0 @typechain/hardhat@^9.0.0 @types/sinon-chai@^3.2.3 chai@^4.2.0 dotenv@^16.4.5 ethereum-waffle@^3.0.0 ethers@^5.0.0 hardhat@^2.22.10 hardhat-deploy@^0.12.4 hardhat-gas-reporter@^1.0.8 prettier@^3.3.3 prettier-plugin-solidity@^1.4.1 solidity-coverage@^0.8.0 typechain@^8.3.0 hardhat-contract-sizer
 ```
+
+### hardhat-shorthand package
+
+hardhat-shorthand is an NPM package that installs a globally accessible binary called hh that runs the project's locally installed hardhat and supports shell autocompletion for tasks.
+
+Run:
+
+```
+yarn global add hardhat-shorthand
+```
+
+IMPORTANT: you need to install globally
+
+Now instead
+
+Check the guide to learn more: https://hardhat.org/hardhat-runner/docs/guides/command-line-completion
+
+To enable autocomplete support you'll also need to install the shell completion script using hardhat-completion, which comes with hardhat-shorthand. Run hardhat-completion install and follow the instructions to install the completion script.
+
+#### Linux Users Installations hh (hardhat-shorthand)
+
+It could happen that `hh` shorthand command for Hardhat is not being recognized, even though you've installed `hardhat-shorthand` globally.
+
+To resolve this issue:
+
+Do this from the terminal opened in your project directory such as `mattia@mat:~/Code/codecamp/hardhat-smartcontract-lottery$`
+
+1. **Check if `yarn` global bin path is in your `$PATH`**:
+
+    - First, check where `yarn global add` installs binaries:
+        ```bash
+        yarn global bin
+        ```
+        This should output a directory path, like `/home/your_user/.yarn/bin` or `/usr/local/bin`.
+
+2. **Add Yarn's global bin directory to `$PATH`** (if it's not already):
+
+    - Open your terminal configuration file (`.bashrc`, `.zshrc`, etc.) and add the following line:
+        ```bash
+        export PATH="$PATH:$(yarn global bin)"
+        ```
+    - After saving, apply the changes with:
+        ```bash
+        source ~/.bashrc  # or ~/.zshrc
+        ```
+
+3. **Verify installation**:
+    - Run the following to confirm that `hh` is now recognized:
+        ```bash
+        hh --version
+        ```
 
 ### Chainlink contracts package
 
@@ -107,6 +160,8 @@ The non-indexed parameters are encoded in the ABI. That's why are more complex t
 
 ## Introduction to Chainlink VRF (Randomness in Web3)
 
+Subscriptions ChainLink VRF: https://vrf.chain.link/
+
 Chainlink VRF v2.5 docs: https://docs.chain.link/vrf
 Video explanation 1: https://www.youtube.com/watch?v=eRzLNfn4LGc
 Video Explanation 2: https://youtu.be/gyMwXuJrbJQ?si=UXGhxBgMG9t-KnBb&t=50588
@@ -128,3 +183,26 @@ Complete the following tasks to test your VRF v2.5 consumer locally:
 Try testing locally.
 
 You can get the test here https://github.com/smartcontractkit/hardhat-starter-kit/blob/main/test/unit/RandomNumberConsumer.spec.js
+
+## Introduction to Chainlink Automation
+
+In order to automatically trigger some functions of our contracts we are going to use ChainLink Automation
+
+> ℹ️ **GET STARTED**  
+> Try Chainlink Automation in the [Getting Started](https://docs.chain.link/chainlink-automation/overview/getting-started) guide.
+
+---
+
+> ⚠️ **DEPRECATION OF OLDER UPKEEPS**  
+> Existing upkeeps on versions earlier than v2.1 will stop being performed on **August 29, 2024**.  
+> [Migrate your older upkeeps](https://docs.chain.link/chainlink-automation/guides/migrate-to-v2) to the latest version of Automation.
+
+### Test and Depoly the Upkeep
+
+ChainLink Keepers (deprecated) video explanation (still usefull): https://youtu.be/gyMwXuJrbJQ?si=IuAdQSnuL8huNSds&t=52167
+
+Follow this Chainlink example: https://docs.chain.link/chainlink-automation/guides/compatible-contracts#example-automation-compatible-contract-using-custom-logic-trigger
+
+Supported Networks: https://docs.chain.link/chainlink-automation/overview/supported-networks
+
+We may need to use chainlink CCIP: https://docs.chain.link/ccip
