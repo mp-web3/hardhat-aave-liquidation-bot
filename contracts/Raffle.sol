@@ -16,7 +16,19 @@ import {VRFV2PlusClient} from "@chainlink/contracts/src/v0.8/vrf/dev/libraries/V
 // ./interfaces/AutomationCompatibleInterface.sol
 import {AutomationCompatibleInterface} from "@chainlink/contracts/src/v0.8/automation/AutomationCompatible.sol";
 
+/**
+ * @title A Sample Raffle Contract
+ * @author Mattia Papa
+ * @notice This contract is for creating a untamperable decetralized lottery
+ * @dev Implements Chainlink VRF v2.5 and Chainlink Automation
+ */
 contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
+    /* Type declarations */
+    enum RaffleState {
+        OPEN,
+        CALCULATING
+    }
+
     /* State Variables */
     uint16 private constant REQUEST_CONFIRMATIONS = 3;
     uint32 private constant NUM_WORDS = 1;
@@ -34,6 +46,9 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
 
     /* Lottery Variables */
     address private s_lastWinner;
+    RaffleState private s_raffleState;
+    uint256 private s_lastTimeStamp;
+    uint256 private i_interval;
 
     /* Events */
     // The convention for naming events is the inverted order of the function name where it is emitted
@@ -45,23 +60,32 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
     /* Errors */
     error Raffle__NotEnoughEth();
     error Raffle__TransferToLastWinnerFailed();
+    error Raffle__NotOpen();
+    error Raffle__UpKeepNotNeeded(uint256 currentBalance, uint256 numPlayers, uint256 raffleState);
 
     constructor(
         address vrfCoordinatorV2_5,
         uint256 entranceFee,
         bytes32 keyHash,
         uint64 subscriptionId,
-        uint32 callBackGasLimit
+        uint32 callBackGasLimit,
+        uint256 interval
     ) VRFConsumerBaseV2Plus(vrfCoordinatorV2_5) {
         s_keyHash = keyHash;
         s_subscriptionId = subscriptionId;
         i_entranceFee = entranceFee;
         i_callbackGasLimit = callBackGasLimit;
+        s_raffleState = RaffleState.OPEN;
+        s_lastTimeStamp = block.timestamp;
+        i_interval = interval;
     }
 
-    function enterRaffle() public payable {
+    function enterRaffle() public payable /* onlyOpen */ {
         if (msg.value < i_entranceFee) {
             revert Raffle__NotEnoughEth();
+        }
+        if (s_raffleState != RaffleState.OPEN) {
+            revert Raffle__NotOpen();
         }
         s_players.push(payable(msg.sender));
         emit RaffleEnter(msg.sender);
@@ -70,16 +94,38 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
     /**
      * @dev This is the function that the Chainlink Automation node call
      * they look for the checkUpKeep to return true if update is needed
+     * The following conditions should be true in order to return true:
+     * 1. Our time interval should be passed
+     * 2. The lottery should have at least 1 player
+     * 3. Our subscription has enough funds to run the keeper
+     * 4. Lottery should be in `open` state
      */
     function checkUpkeep(
-        bytes calldata /* checkData */
-    ) external view override returns (bool upkeepNeeded, bytes memory /* performData */) {
-        upkeepNeeded = (block.timestamp - lastTimeStamp) > interval;
+        bytes memory /* checkData */
+    ) public override returns (bool upkeepNeeded, bytes memory /* performData */) {
+        bool isOpen = RaffleState.OPEN == s_raffleState;
+        bool timePassed = ((block.timestamp - s_lastTimeStamp) > i_interval);
+        bool hasPlayers = (s_players.length > 0);
+        bool hasBalance = (address(this).balance > 0);
+
+        upkeepNeeded = (isOpen && timePassed && hasPlayers && hasBalance);
         // We don't use the checkData in this example. The checkData is defined when the Upkeep was registered.
-        return (upkeepNeeded, new bytes(0)); // Assigning a default value
+        return (upkeepNeeded, bytes("")); // Assigning a default value
     }
 
-    function requestRandomWinner() external onlyOwner {
+    function performUpkeep(bytes memory /* performData */) external override {
+        (bool upkeepNeeded, ) = checkUpkeep("");
+        if (!upkeepNeeded) {
+            revert Raffle__UpKeepNotNeeded(
+                address(this).balance,
+                s_players.length,
+                uint256(s_raffleState)
+            );
+        }
+
+        // Update RaffleState
+        s_raffleState = RaffleState.CALCULATING;
+
         // Will revert if subscription is not set and funded.
         s_requestId = s_vrfCoordinator.requestRandomWords(
             VRFV2PlusClient.RandomWordsRequest({
@@ -103,6 +149,9 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
         uint256 indexOfWinner = randomWords[0] % s_players.length;
         address payable lastWinner = s_players[indexOfWinner];
         s_lastWinner = lastWinner;
+        s_raffleState = RaffleState.OPEN;
+        s_players = new address payable[](0);
+        s_lastTimeStamp = block.timestamp;
         (bool success, ) = lastWinner.call{value: address(this).balance}("");
         if (!success) {
             revert Raffle__TransferToLastWinnerFailed();
@@ -120,5 +169,27 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
 
     function getLastWinner() public view returns (address) {
         return s_lastWinner;
+    }
+
+    function getRaffleState() public view returns (RaffleState) {
+        return s_raffleState;
+    }
+
+    function getNumberOfPlayers() public view returns (uint256) {
+        return s_players.length;
+    }
+
+    function getLatestTimestamp() public view returns (uint256) {
+        return s_lastTimeStamp;
+    }
+
+    // Returning NumWords is embedded in the bytecode is tecnically we are not reading from
+    // storage therefor we can make it "pure"
+    function getNumWords() public pure returns (uint32) {
+        return NUM_WORDS;
+    }
+
+    function getRequestConfirmations() public pure returns (uint16) {
+        return REQUEST_CONFIRMATIONS;
     }
 }

@@ -80,6 +80,23 @@ To obtain the mocks go to: https://docs.chain.link/vrf/v2-5/subscription/test-lo
 
 ## Data Structures
 
+### Enums
+
+Enums are a way to declare a new custom type in solidity.
+In our Raffle contract we want to create an enum that keeps trck of the lottery state. In order
+for the contract to know when the lottery is open, closed, etc...
+
+```
+enum RaffleState {
+    OPEN,
+    CALCULATING,
+    CLOSED
+}
+// uint256 0 = OPEN, 1 = CALCULATING, 2 = CLOSED
+```
+
+In the background this corresponds to a uint256 that has differnt values assigned, based on each state
+
 ### Events
 
 Link to Patrick explanation: https://youtu.be/gyMwXuJrbJQ?si=22TR72UVWVyB9WWY&t=50186
