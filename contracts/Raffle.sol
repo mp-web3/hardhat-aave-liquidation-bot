@@ -11,10 +11,9 @@ pragma solidity ^0.8.7;
 import {VRFConsumerBaseV2Plus} from "@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol";
 import {VRFV2PlusClient} from "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
 // import {IVRFCoordinatorV2Plus} from "@chainlink/contracts/src/v0.8/vrf/dev/interfaces/IVRFCoordinatorV2Plus.sol";
-
 // AutomationCompatible.sol imports the functions from both ./AutomationBase.sol and
 // ./interfaces/AutomationCompatibleInterface.sol
-import {AutomationCompatibleInterface} from "@chainlink/contracts/src/v0.8/automation/AutomationCompatible.sol";
+import {AutomationCompatibleInterface} from "@chainlink/contracts/src/v0.8/automation/interfaces/AutomationCompatibleInterface.sol";
 
 /**
  * @title A Sample Raffle Contract
@@ -23,6 +22,12 @@ import {AutomationCompatibleInterface} from "@chainlink/contracts/src/v0.8/autom
  * @dev Implements Chainlink VRF v2.5 and Chainlink Automation
  */
 contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
+    /* Errors */
+    error Raffle__UpKeepNotNeeded(uint256 currentBalance, uint256 numPlayers, uint256 raffleState);
+    error Raffle__TransferToLastWinnerFailed();
+    error Raffle__SendMoreToEnterRaffle();
+    error Raffle__NotOpen();
+
     /* Type declarations */
     enum RaffleState {
         OPEN,
@@ -30,89 +35,88 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
     }
 
     /* State Variables */
-    uint16 private constant REQUEST_CONFIRMATIONS = 3;
-    uint32 private constant NUM_WORDS = 1;
-    uint32 private immutable i_callbackGasLimit;
-    uint256 private immutable i_entranceFee;
-    // Your subscription ID.
-    uint64 immutable s_subscriptionId;
+
+    // Chainlink VRF Variables
+    uint256 immutable i_subscriptionId;
     // The gas lane to use, which specifies the maximum gas price to bump to.
     // For a list of available gas lanes on each network,
     // see https://docs.chain.link/vrf/v2-5/supported-networks
-    bytes32 immutable s_keyHash;
-    address payable[] private s_players;
+    bytes32 private immutable i_gasLane; //keyHash
+    uint32 private immutable i_callbackGasLimit;
+    uint16 private constant REQUEST_CONFIRMATIONS = 3;
+    uint32 private constant NUM_WORDS = 1;
     uint256[] public s_randomWords;
-    uint256 public s_requestId;
 
     /* Lottery Variables */
-    address private s_lastWinner;
-    RaffleState private s_raffleState;
+    uint256 private immutable i_interval;
+    uint256 private immutable i_entranceFee;
     uint256 private s_lastTimeStamp;
-    uint256 private i_interval;
+    address private s_lastWinner;
+    address payable[] private s_players;
+    RaffleState private s_raffleState;
 
     /* Events */
     // The convention for naming events is the inverted order of the function name where it is emitted
     // So if the function is called `enterRaffle()` the corresponding event will be named `raffleEntered`
-    event RaffleEnter(address indexed player);
     event RequestedRaffleWinner(uint256 indexed requestId);
-    event WinnerPicked(address indexed winner);
-
-    /* Errors */
-    error Raffle__NotEnoughEth();
-    error Raffle__TransferToLastWinnerFailed();
-    error Raffle__NotOpen();
-    error Raffle__UpKeepNotNeeded(uint256 currentBalance, uint256 numPlayers, uint256 raffleState);
+    event RaffleEnter(address indexed player);
+    event WinnerPicked(address indexed player);
 
     constructor(
-        address vrfCoordinatorV2_5,
+        address vrfCoordinatorV2,
+        uint256 subscriptionId,
+        bytes32 gasLane, //keyHash
+        uint256 interval,
         uint256 entranceFee,
-        bytes32 keyHash,
-        uint64 subscriptionId,
-        uint32 callBackGasLimit,
-        uint256 interval
-    ) VRFConsumerBaseV2Plus(vrfCoordinatorV2_5) {
-        s_keyHash = keyHash;
-        s_subscriptionId = subscriptionId;
+        uint32 callBackGasLimit
+    ) VRFConsumerBaseV2Plus(vrfCoordinatorV2) {
+        i_subscriptionId = subscriptionId;
+        i_gasLane = gasLane;
+        i_interval = interval;
         i_entranceFee = entranceFee;
         i_callbackGasLimit = callBackGasLimit;
         s_raffleState = RaffleState.OPEN;
         s_lastTimeStamp = block.timestamp;
-        i_interval = interval;
     }
 
-    function enterRaffle() public payable /* onlyOpen */ {
+    function enterRaffle() public payable {
         if (msg.value < i_entranceFee) {
-            revert Raffle__NotEnoughEth();
+            revert Raffle__SendMoreToEnterRaffle();
         }
         if (s_raffleState != RaffleState.OPEN) {
             revert Raffle__NotOpen();
         }
         s_players.push(payable(msg.sender));
+        // Emit an event when we update a dynamic array or mapping
         emit RaffleEnter(msg.sender);
     }
 
     /**
-     * @dev This is the function that the Chainlink Automation node call
-     * they look for the checkUpKeep to return true if update is needed
-     * The following conditions should be true in order to return true:
-     * 1. Our time interval should be passed
-     * 2. The lottery should have at least 1 player
-     * 3. Our subscription has enough funds to run the keeper
-     * 4. Lottery should be in `open` state
+     * @dev This is the function that the Chainlink Keeper nodes call
+     * they look for `upkeepNeeded` to return True.
+     * the following should be true for this to return true:
+     * 1. The time interval has passed between raffle runs.
+     * 2. The lottery is open.
+     * 3. The contract has ETH.
+     * 4. Implicity, your subscription is funded with LINK.
      */
     function checkUpkeep(
         bytes memory /* checkData */
-    ) public override returns (bool upkeepNeeded, bytes memory /* performData */) {
+    ) public view override returns (bool upkeepNeeded, bytes memory /* performData */) {
         bool isOpen = RaffleState.OPEN == s_raffleState;
         bool timePassed = ((block.timestamp - s_lastTimeStamp) > i_interval);
         bool hasPlayers = (s_players.length > 0);
         bool hasBalance = (address(this).balance > 0);
 
         upkeepNeeded = (isOpen && timePassed && hasPlayers && hasBalance);
-        // We don't use the checkData in this example. The checkData is defined when the Upkeep was registered.
-        return (upkeepNeeded, bytes("")); // Assigning a default value
+        // We don't use the checkData in this example. Therefore we pass and empty bytes memory
+        return (upkeepNeeded, "0x0");
     }
 
+    /**
+     * @dev Once `checkUpkeep` is returning `true`, this function is called
+     * and it kicks off a Chainlink VRF call to get a random winner.
+     */
     function performUpkeep(bytes memory /* performData */) external override {
         (bool upkeepNeeded, ) = checkUpkeep("");
         if (!upkeepNeeded) {
@@ -127,10 +131,10 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
         s_raffleState = RaffleState.CALCULATING;
 
         // Will revert if subscription is not set and funded.
-        s_requestId = s_vrfCoordinator.requestRandomWords(
+        uint256 requestId = s_vrfCoordinator.requestRandomWords(
             VRFV2PlusClient.RandomWordsRequest({
-                keyHash: s_keyHash,
-                subId: s_subscriptionId,
+                keyHash: i_gasLane,
+                subId: i_subscriptionId,
                 requestConfirmations: REQUEST_CONFIRMATIONS,
                 callbackGasLimit: i_callbackGasLimit,
                 numWords: NUM_WORDS,
@@ -140,8 +144,14 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
                 )
             })
         );
+
+        emit RequestedRaffleWinner(requestId);
     }
 
+    /**
+     * @dev This is the function that Chainlink VRF node
+     * calls to send the money to the random winner.
+     */
     function fulfillRandomWords(
         uint256 /*requestId*/,
         uint256[] calldata randomWords
@@ -149,47 +159,54 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
         uint256 indexOfWinner = randomWords[0] % s_players.length;
         address payable lastWinner = s_players[indexOfWinner];
         s_lastWinner = lastWinner;
-        s_raffleState = RaffleState.OPEN;
         s_players = new address payable[](0);
+        s_raffleState = RaffleState.OPEN;
         s_lastTimeStamp = block.timestamp;
+        emit WinnerPicked(lastWinner);
         (bool success, ) = lastWinner.call{value: address(this).balance}("");
         if (!success) {
             revert Raffle__TransferToLastWinnerFailed();
         }
-        emit WinnerPicked(lastWinner);
     }
 
-    function getEntranceFee() public view returns (uint256) {
-        return i_entranceFee;
+    /**
+     * Getter Functions
+     */
+    function getRaffleState() public view returns (RaffleState) {
+        return s_raffleState;
+    }
+
+    // Returning NumWords is embedded in the bytecode is tecnically we are not reading from
+    // storage therefor we can make it "pure"
+    function getNumWords() public pure returns (uint256) {
+        return NUM_WORDS;
+    }
+
+    function getRequestConfirmations() public pure returns (uint256) {
+        return REQUEST_CONFIRMATIONS;
+    }
+
+    function getRecentWinner() public view returns (address) {
+        return s_lastWinner;
     }
 
     function getPlayer(uint256 index) public view returns (address) {
         return s_players[index];
     }
 
-    function getLastWinner() public view returns (address) {
-        return s_lastWinner;
+    function getLastTimeStamp() public view returns (uint256) {
+        return s_lastTimeStamp;
     }
 
-    function getRaffleState() public view returns (RaffleState) {
-        return s_raffleState;
+    function getInterval() public view returns (uint256) {
+        return i_interval;
+    }
+
+    function getEntranceFee() public view returns (uint256) {
+        return i_entranceFee;
     }
 
     function getNumberOfPlayers() public view returns (uint256) {
         return s_players.length;
-    }
-
-    function getLatestTimestamp() public view returns (uint256) {
-        return s_lastTimeStamp;
-    }
-
-    // Returning NumWords is embedded in the bytecode is tecnically we are not reading from
-    // storage therefor we can make it "pure"
-    function getNumWords() public pure returns (uint32) {
-        return NUM_WORDS;
-    }
-
-    function getRequestConfirmations() public pure returns (uint16) {
-        return REQUEST_CONFIRMATIONS;
     }
 }

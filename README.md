@@ -1,5 +1,9 @@
 # Hardhat Smart Contract Lottery
 
+Updated Patrick Code for Raffle.sol: https://github.com/Cyfrin/foundry-smart-contract-lottery-cu/blob/main/src/Raffle.sol
+
+Updated Video for smartcontractlottery: https://youtu.be/-1GB6m39-rM?si=DHhy67y5eyBAJp3p&t=50510
+
 smartcontractkit link: https://github.com/PatrickAlphaC/hardhat-smartcontract-lottery-fcc
 
 Code link Patrick: https://github.com/smartcontractkit/full-blockchain-solidity-course-js?tab=readme-ov-file#lesson-9-hardhat-smart-contract-lottery
