@@ -118,7 +118,7 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
      * and it kicks off a Chainlink VRF call to get a random winner.
      */
     function performUpkeep(bytes memory /* performData */) external override {
-        (bool upkeepNeeded, ) = checkUpkeep("");
+        (bool upkeepNeeded, ) = checkUpkeep("0x0");
         if (!upkeepNeeded) {
             revert Raffle__UpKeepNotNeeded(
                 address(this).balance,
