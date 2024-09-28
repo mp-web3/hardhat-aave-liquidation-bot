@@ -5,16 +5,15 @@ require("dotenv").config
 
 const VRF_SUB_FUND_AMOUNT_HH = ethers.utils.parseEther("10")
 
-module.exports = async function (hre) {
-    const { getNamedAccounts, deployments } = hre
+module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deploy, log } = deployments
-    const deployer = (await getNamedAccounts()).deployer
+    const { deployer } = await getNamedAccounts()
     const chainId = network.config.chainId
-    let vrfCoordinatorV2_5Address, subscriptionId
+    let vrfCoordinatorV2_5Address, subscriptionId, vrfCoordinatorV2_5Mock
 
     if (developmentChains.includes(network.name)) {
-        log("Getting VRFCoordinatorV2 deployment")
-        const vrfCoordinatorV2_5Mock = await ethers.getContract("VRFCoordinatorV2_5Mock", deployer)
+        log("Getting VRFCoordinatorV2_5 deployment")
+        vrfCoordinatorV2_5Mock = await ethers.getContract("VRFCoordinatorV2_5Mock")
         vrfCoordinatorV2_5Address = vrfCoordinatorV2_5Mock.address
         // Here we create a new subscription for local development/testing purposes
         const transactionResponse = await vrfCoordinatorV2_5Mock.createSubscription() // the function is inherited from SubscriptionAPI.sol
