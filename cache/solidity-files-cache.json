@@ -1,9 +1,51 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
+    "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/contracts/tests/VRFCoordinatorV2_5Mock.sol": {
+      "lastModificationDate": 1727540564830,
+      "contentHash": "93c0aef6bf4e80dbe8beeb743c16b5d4",
+      "sourceName": "contracts/tests/VRFCoordinatorV2_5Mock.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@chainlink/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.19"
+      ],
+      "artifacts": []
+    },
     "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/contracts/Raffle.sol": {
-      "lastModificationDate": 1727521317471,
-      "contentHash": "858d855237218db9405547c96e7a23fc",
+      "lastModificationDate": 1727537279076,
+      "contentHash": "89f5703806bfb103e903bd275ce5cb22",
       "sourceName": "contracts/Raffle.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -45,95 +87,6 @@
       ],
       "artifacts": [
         "Raffle"
-      ]
-    },
-    "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/contracts/mocks/VRFCoordinatorV2_5Mock.sol": {
-      "lastModificationDate": 1727521840249,
-      "contentHash": "93c0aef6bf4e80dbe8beeb743c16b5d4",
-      "sourceName": "contracts/mocks/VRFCoordinatorV2_5Mock.sol",
-      "solcConfig": {
-        "version": "0.8.19",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [
-        "@chainlink/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.19"
-      ],
-      "artifacts": []
-    },
-    "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/node_modules/@chainlink/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol": {
-      "lastModificationDate": 1726940315383,
-      "contentHash": "b2cebcb56a66411fc34933443fdf4826",
-      "sourceName": "@chainlink/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol",
-      "solcConfig": {
-        "version": "0.8.19",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [
-        "../dev/interfaces/IVRFCoordinatorV2Plus.sol",
-        "../dev/libraries/VRFV2PlusClient.sol",
-        "../dev/SubscriptionAPI.sol",
-        "../dev/VRFConsumerBaseV2Plus.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.19"
-      ],
-      "artifacts": [
-        "VRFCoordinatorV2_5Mock"
       ]
     },
     "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/node_modules/@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol": {
@@ -182,10 +135,10 @@
         "VRFConsumerBaseV2Plus"
       ]
     },
-    "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/node_modules/@chainlink/contracts/src/v0.8/vrf/dev/interfaces/IVRFCoordinatorV2Plus.sol": {
-      "lastModificationDate": 1726940315397,
-      "contentHash": "a40c594759ed60ae8b25c9878deb5190",
-      "sourceName": "@chainlink/contracts/src/v0.8/vrf/dev/interfaces/IVRFCoordinatorV2Plus.sol",
+    "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/node_modules/@chainlink/contracts/src/v0.8/automation/interfaces/AutomationCompatibleInterface.sol": {
+      "lastModificationDate": 1726940315376,
+      "contentHash": "5cb8d69e4e9ed7ff601180e31372d0ca",
+      "sourceName": "@chainlink/contracts/src/v0.8/automation/interfaces/AutomationCompatibleInterface.sol",
       "solcConfig": {
         "version": "0.8.19",
         "settings": {
@@ -216,15 +169,12 @@
           }
         }
       },
-      "imports": [
-        "../libraries/VRFV2PlusClient.sol",
-        "./IVRFSubscriptionV2Plus.sol"
-      ],
+      "imports": [],
       "versionPragmas": [
         "^0.8.0"
       ],
       "artifacts": [
-        "IVRFCoordinatorV2Plus"
+        "AutomationCompatibleInterface"
       ]
     },
     "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/node_modules/@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol": {
@@ -269,55 +219,6 @@
         "VRFV2PlusClient"
       ]
     },
-    "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/node_modules/@chainlink/contracts/src/v0.8/vrf/dev/SubscriptionAPI.sol": {
-      "lastModificationDate": 1726940315383,
-      "contentHash": "a303ff78696720a7d1fb4c0dc632c262",
-      "sourceName": "@chainlink/contracts/src/v0.8/vrf/dev/SubscriptionAPI.sol",
-      "solcConfig": {
-        "version": "0.8.19",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [
-        "../../vendor/openzeppelin-solidity/v4.7.3/contracts/utils/structs/EnumerableSet.sol",
-        "../../shared/interfaces/LinkTokenInterface.sol",
-        "../../shared/access/ConfirmedOwner.sol",
-        "../../shared/interfaces/AggregatorV3Interface.sol",
-        "../../shared/interfaces/IERC677Receiver.sol",
-        "./interfaces/IVRFSubscriptionV2Plus.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.4"
-      ],
-      "artifacts": [
-        "SubscriptionAPI"
-      ]
-    },
     "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/node_modules/@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol": {
       "lastModificationDate": 1726940315382,
       "contentHash": "1ed782c1e3014a255f9171aefc3cdde3",
@@ -360,6 +261,51 @@
       ],
       "artifacts": [
         "ConfirmedOwner"
+      ]
+    },
+    "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/node_modules/@chainlink/contracts/src/v0.8/vrf/dev/interfaces/IVRFCoordinatorV2Plus.sol": {
+      "lastModificationDate": 1726940315397,
+      "contentHash": "a40c594759ed60ae8b25c9878deb5190",
+      "sourceName": "@chainlink/contracts/src/v0.8/vrf/dev/interfaces/IVRFCoordinatorV2Plus.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "../libraries/VRFV2PlusClient.sol",
+        "./IVRFSubscriptionV2Plus.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IVRFCoordinatorV2Plus"
       ]
     },
     "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/node_modules/@chainlink/contracts/src/v0.8/vrf/dev/interfaces/IVRFMigratableConsumerV2Plus.sol": {
@@ -532,6 +478,55 @@
         "IVRFSubscriptionV2Plus"
       ]
     },
+    "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/node_modules/@chainlink/contracts/src/v0.8/vrf/dev/SubscriptionAPI.sol": {
+      "lastModificationDate": 1726940315383,
+      "contentHash": "a303ff78696720a7d1fb4c0dc632c262",
+      "sourceName": "@chainlink/contracts/src/v0.8/vrf/dev/SubscriptionAPI.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "../../vendor/openzeppelin-solidity/v4.7.3/contracts/utils/structs/EnumerableSet.sol",
+        "../../shared/interfaces/LinkTokenInterface.sol",
+        "../../shared/access/ConfirmedOwner.sol",
+        "../../shared/interfaces/AggregatorV3Interface.sol",
+        "../../shared/interfaces/IERC677Receiver.sol",
+        "./interfaces/IVRFSubscriptionV2Plus.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.4"
+      ],
+      "artifacts": [
+        "SubscriptionAPI"
+      ]
+    },
     "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/node_modules/@chainlink/contracts/src/v0.8/shared/interfaces/LinkTokenInterface.sol": {
       "lastModificationDate": 1726940315383,
       "contentHash": "2bad029d4994ec16b93df2e46955d37f",
@@ -700,10 +695,10 @@
         "EnumerableSet"
       ]
     },
-    "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/node_modules/@chainlink/contracts/src/v0.8/automation/AutomationCompatible.sol": {
-      "lastModificationDate": 1726940315366,
-      "contentHash": "5e080eff2df83e7d1ec3b981fddeb1ce",
-      "sourceName": "@chainlink/contracts/src/v0.8/automation/AutomationCompatible.sol",
+    "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/node_modules/@chainlink/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol": {
+      "lastModificationDate": 1727538791639,
+      "contentHash": "fd195faa01adb9efb7857ab929f480a6",
+      "sourceName": "@chainlink/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol",
       "solcConfig": {
         "version": "0.8.19",
         "settings": {
@@ -735,98 +730,16 @@
         }
       },
       "imports": [
-        "./AutomationBase.sol",
-        "./interfaces/AutomationCompatibleInterface.sol"
+        "../dev/interfaces/IVRFCoordinatorV2Plus.sol",
+        "../dev/libraries/VRFV2PlusClient.sol",
+        "../dev/SubscriptionAPI.sol",
+        "../dev/VRFConsumerBaseV2Plus.sol"
       ],
       "versionPragmas": [
-        "^0.8.0"
+        "^0.8.19"
       ],
       "artifacts": [
-        "AutomationCompatible"
-      ]
-    },
-    "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/node_modules/@chainlink/contracts/src/v0.8/automation/AutomationBase.sol": {
-      "lastModificationDate": 1726940315366,
-      "contentHash": "b53171d7e10f5036ecc73fac5d28028b",
-      "sourceName": "@chainlink/contracts/src/v0.8/automation/AutomationBase.sol",
-      "solcConfig": {
-        "version": "0.8.19",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "AutomationBase"
-      ]
-    },
-    "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/node_modules/@chainlink/contracts/src/v0.8/automation/interfaces/AutomationCompatibleInterface.sol": {
-      "lastModificationDate": 1726940315376,
-      "contentHash": "5cb8d69e4e9ed7ff601180e31372d0ca",
-      "sourceName": "@chainlink/contracts/src/v0.8/automation/interfaces/AutomationCompatibleInterface.sol",
-      "solcConfig": {
-        "version": "0.8.19",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "AutomationCompatibleInterface"
+        "VRFCoordinatorV2_5Mock"
       ]
     }
   }

@@ -9,7 +9,7 @@ const WEI_PER_UNIT_LINK = "4750454356114626"
 
 module.exports = async function ({ getNamedAccounts, deployments }) {
     const { deploy, log } = deployments
-    const { deployer } = getNamedAccounts()
+    const { deployer } = await getNamedAccounts()
     const args = [BASE_FEE, GAS_PRICE, WEI_PER_UNIT_LINK]
 
     if (developmentChains.includes(network.name)) {
@@ -19,7 +19,7 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
             log: true,
             // Check standard argument/parameters values to deploy mock
             // https://docs.chain.link/vrf/v2-5/subscription/test-locally#deploy-vrfcoordinatorv2_5mock
-            args: [args],
+            args: args,
         })
         log("Mocks Deployed!")
         log("-------------------------------------------")

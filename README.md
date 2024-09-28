@@ -242,3 +242,7 @@ To get more precise values go to [Deploy VRFCoordinatorV2_5Mock](https://docs.ch
 (These values are for paying the oracle with LINK! nont with ETH)
 
 ![parameters to deploy VRFCoordinatorV2_5Mock paying with LINK](./media/parameters-deploy-VRFCoordinatorV2_5-pay-with-LINK-token.png)
+
+## Create and Fund ChainLink VRF Subscriptions Programatically
+
+For local testing on "hardhat" network is in fact needed to create a subscription programmatically

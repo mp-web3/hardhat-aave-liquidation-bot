@@ -55,11 +55,11 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
 
     constructor(
         address vrfCoordinatorV2_5,
-        uint256 subscriptionId,
-        bytes32 gasLane, //keyHash
-        uint256 interval,
         uint256 entranceFee,
-        uint32 callBackGasLimit
+        bytes32 gasLane, //keyHash
+        uint256 subscriptionId,
+        uint32 callBackGasLimit,
+        uint256 interval
     ) VRFConsumerBaseV2Plus(vrfCoordinatorV2_5) {
         i_subscriptionId = subscriptionId;
         i_gasLane = gasLane;
