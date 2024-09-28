@@ -227,3 +227,18 @@ Follow this Chainlink example: https://docs.chain.link/chainlink-automation/guid
 Supported Networks: https://docs.chain.link/chainlink-automation/overview/supported-networks
 
 We may need to use chainlink CCIP: https://docs.chain.link/ccip
+
+### Deploy Mocks
+
+In order to deploy VRFCoordinatorV2_5Mock we need to pass 3 arguments to the constructor:
+
+-   `uint96 _baseFee`
+-   `uint96 _gasPrice`
+-   `int256 _weiPerUnitLink`
+
+Check in the [documentation](https://docs.chain.link/vrf/v2-5/supported-networks) the parameters provided by Chainlink for the parameters det for example on Sepolia testnet.
+
+To get more precise values go to [Deploy VRFCoordinatorV2_5Mock](https://docs.chain.link/vrf/v2-5/subscription/test-locally#deploy-vrfcoordinatorv2_5mock) where you can find some standard values
+(These values are for paying the oracle with LINK! nont with ETH)
+
+![parameters to deploy VRFCoordinatorV2_5Mock paying with LINK](./media/parameters-deploy-VRFCoordinatorV2_5-pay-with-LINK-token.png)

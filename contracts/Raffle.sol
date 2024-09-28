@@ -1,18 +1,9 @@
-/// Raffle
-// Enter the lottery (paying some amount)
-// Pick a random winner (verifiably random)
-// Winner to be selected every x time --> completly automated
-// Chainlink Oracle --> Randomness, Automated Execution (Chainlink Keepers)
-
 // SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.7;
 
 import {VRFConsumerBaseV2Plus} from "@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol";
 import {VRFV2PlusClient} from "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
-// import {IVRFCoordinatorV2Plus} from "@chainlink/contracts/src/v0.8/vrf/dev/interfaces/IVRFCoordinatorV2Plus.sol";
-// AutomationCompatible.sol imports the functions from both ./AutomationBase.sol and
-// ./interfaces/AutomationCompatibleInterface.sol
 import {AutomationCompatibleInterface} from "@chainlink/contracts/src/v0.8/automation/interfaces/AutomationCompatibleInterface.sol";
 
 /**
@@ -63,13 +54,13 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
     event WinnerPicked(address indexed player);
 
     constructor(
-        address vrfCoordinatorV2,
+        address vrfCoordinatorV2_5,
         uint256 subscriptionId,
         bytes32 gasLane, //keyHash
         uint256 interval,
         uint256 entranceFee,
         uint32 callBackGasLimit
-    ) VRFConsumerBaseV2Plus(vrfCoordinatorV2) {
+    ) VRFConsumerBaseV2Plus(vrfCoordinatorV2_5) {
         i_subscriptionId = subscriptionId;
         i_gasLane = gasLane;
         i_interval = interval;
@@ -140,7 +131,7 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
                 numWords: NUM_WORDS,
                 extraArgs: VRFV2PlusClient._argsToBytes(
                     // Set nativePayment to true to pay for VRF requests with Sepolia ETH instead of LINK
-                    VRFV2PlusClient.ExtraArgsV1({nativePayment: true})
+                    VRFV2PlusClient.ExtraArgsV1({nativePayment: false})
                 )
             })
         );

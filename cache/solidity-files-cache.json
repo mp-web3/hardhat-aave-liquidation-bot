@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/contracts/Raffle.sol": {
-      "lastModificationDate": 1727018780483,
-      "contentHash": "9f18e31f71ee14fe3fc6c88be5d534c8",
+      "lastModificationDate": 1727521317471,
+      "contentHash": "858d855237218db9405547c96e7a23fc",
       "sourceName": "contracts/Raffle.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -48,8 +48,8 @@
       ]
     },
     "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/contracts/mocks/VRFCoordinatorV2_5Mock.sol": {
-      "lastModificationDate": 1726940509124,
-      "contentHash": "4b115b962a1621d0905f1480bd4f3050",
+      "lastModificationDate": 1727521840249,
+      "contentHash": "93c0aef6bf4e80dbe8beeb743c16b5d4",
       "sourceName": "contracts/mocks/VRFCoordinatorV2_5Mock.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -85,7 +85,7 @@
         "@chainlink/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol"
       ],
       "versionPragmas": [
-        "0.8.19"
+        "^0.8.19"
       ],
       "artifacts": []
     },
@@ -700,96 +700,6 @@
         "EnumerableSet"
       ]
     },
-    "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/contracts/mocks/VRFv2_5Consumer.sol": {
-      "lastModificationDate": 1726940576903,
-      "contentHash": "9be3e07ad1918f52f08e1562552c83d9",
-      "sourceName": "contracts/mocks/VRFv2_5Consumer.sol",
-      "solcConfig": {
-        "version": "0.8.19",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [
-        "@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol",
-        "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol"
-      ],
-      "versionPragmas": [
-        "0.8.19"
-      ],
-      "artifacts": [
-        "RandomNumberConsumerV2_5"
-      ]
-    },
-    "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/contracts/mocks/RandomNumberConsumerV2Plus.sol": {
-      "lastModificationDate": 1726983738551,
-      "contentHash": "8394f680b084fc7506a9e871579a1a81",
-      "sourceName": "contracts/mocks/RandomNumberConsumerV2Plus.sol",
-      "solcConfig": {
-        "version": "0.8.19",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [
-        "@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol",
-        "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.7"
-      ],
-      "artifacts": [
-        "RandomNumberConsumerV2Plus"
-      ]
-    },
     "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/node_modules/@chainlink/contracts/src/v0.8/automation/AutomationCompatible.sol": {
       "lastModificationDate": 1726940315366,
       "contentHash": "5e080eff2df83e7d1ec3b981fddeb1ce",
@@ -917,52 +827,6 @@
       ],
       "artifacts": [
         "AutomationCompatibleInterface"
-      ]
-    },
-    "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/contracts/RaffleUpdated.sol": {
-      "lastModificationDate": 1727018622009,
-      "contentHash": "fd0304476ef04d21ab185fe4b235a06d",
-      "sourceName": "contracts/RaffleUpdated.sol",
-      "solcConfig": {
-        "version": "0.8.19",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [
-        "@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol",
-        "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol",
-        "@chainlink/contracts/src/v0.8/automation/interfaces/AutomationCompatibleInterface.sol"
-      ],
-      "versionPragmas": [
-        "0.8.19"
-      ],
-      "artifacts": [
-        "Raffle"
       ]
     }
   }
