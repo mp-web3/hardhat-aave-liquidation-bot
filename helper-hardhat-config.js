@@ -24,8 +24,10 @@ const networkConfig = {
 // https://docs.chain.link/vrf/v2-5/supported-networks
 
 const developmentChains = ["hardhat", "localhost"]
+const testnetChains = ["sepolia"]
 
 module.exports = {
     networkConfig,
     developmentChains,
+    testnetChains
 }
