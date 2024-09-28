@@ -1,4 +1,3 @@
-const { network } = require("hardhat")
 const { developmentChains } = require("../helper-hardhat-config")
 
 // Since LINK has 18 decimals like ETH we could also use ethers.utils.parseEther("0.1")
@@ -7,7 +6,8 @@ const BASE_FEE = "100000000000000000" // = 0.1 LINK
 const GAS_PRICE = "1000000000"
 const WEI_PER_UNIT_LINK = "4750454356114626"
 
-module.exports = async function ({ getNamedAccounts, deployments }) {
+module.exports = async (hre) => {
+    const { getNamedAccounts, deployments, network } = hre
     const { deploy, log } = deployments
     const { deployer } = await getNamedAccounts()
     const args = [BASE_FEE, GAS_PRICE, WEI_PER_UNIT_LINK]
