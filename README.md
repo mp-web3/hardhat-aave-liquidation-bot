@@ -305,3 +305,32 @@ We can extrapolate `upkeepNeeded` value like so:
 ```
 const { upkeepNeeded } = await raffle.callStatic.checkUpkeep([])
 ```
+
+### Example of how to access events arguments
+
+> const requestId = requestedRaffleWinnerEvent.args.requestId
+
+```
+it("updates the raffle state, emits an event and calls the vrf coordinator", async function () {
+    await raffle.enterRaffle({ value: raffleEntranceFee })
+    await network.provider.send("evm_increaseTime", [interval.toNumber() + 1])
+    await network.provider.request({ method: "evm_mine", params: [] })
+
+    const txResponse = await raffle.performUpkeep([])
+    const txReceipt = await txResponse.wait(1)
+
+    // Find the RequestedRaffleWinner event in the transaction receipt
+    const requestedRaffleWinnerEvent = txReceipt.events.find(
+        (event) => event.event === "RequestedRaffleWinner"
+    )
+
+    // Check that the event exists and extract the requestId
+    assert(requestedRaffleWinnerEvent, "RequestedRaffleWinner event not found")
+    const requestId = requestedRaffleWinnerEvent.args.requestId
+    const raffleState = await raffle.getRaffleState()
+
+    assert(requestId.toNumber() > 0)
+    assert(raffleState.toString() == "1")
+})
+
+```

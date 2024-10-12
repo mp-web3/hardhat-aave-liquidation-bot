@@ -86,5 +86,69 @@ const { assert, expect } = require("chai")
                   const { upkeepNeeded } = await raffle.callStatic.checkUpkeep([])
                   assert(!upkeepNeeded)
               })
+              // Here we want to satisfy all of the conditions except for Raffle.OPEN
+              it("returns upkeepneeded false if raffle isn't open", async function () {
+                  // 1. At least one player has entered the raffle
+                  await raffle.enterRaffle({ value: raffleEntranceFee })
+                  await network.provider.send("evm_increaseTime", [interval.toNumber() + 1])
+                  await network.provider.send("evm_mine", [])
+                  // enough time has passed in order to perform upkeep
+                  await raffle.performUpkeep([])
+                  // Now upkeepNeeded should be false
+                  const { upkeepNeeded } = await raffle.callStatic.checkUpkeep([])
+                  const raffleState = await raffle.getRaffleState()
+                  // "1" corresponds to "CALCULATING"
+                  assert.equal(raffleState.toString(), "1")
+                  assert.equal(upkeepNeeded, false)
+              })
+              it("returns false if enough time hasn't passed", async () => {
+                  await raffle.enterRaffle({ value: raffleEntranceFee })
+                  await network.provider.send("evm_increaseTime", [interval.toNumber() - 5]) // use a higher number here if this test fails
+                  await network.provider.request({ method: "evm_mine", params: [] })
+                  const { upkeepNeeded } = await raffle.callStatic.checkUpkeep("0x") // upkeepNeeded = (timePassed && isOpen && hasBalance && hasPlayers)
+                  assert(!upkeepNeeded)
+              })
+              it("returns true if enough time has passed, has players, eth, and is open", async () => {
+                  await raffle.enterRaffle({ value: raffleEntranceFee })
+                  await network.provider.send("evm_increaseTime", [interval.toNumber() + 1])
+                  await network.provider.request({ method: "evm_mine", params: [] })
+                  const { upkeepNeeded } = await raffle.callStatic.checkUpkeep("0x") // upkeepNeeded = (timePassed && isOpen && hasBalance && hasPlayers)
+                  assert(upkeepNeeded)
+              })
+          })
+          describe("performUpKeep", function () {
+              it("it can only run if checkupkeep is true", async function () {
+                  await raffle.enterRaffle({ value: raffleEntranceFee })
+                  await network.provider.send("evm_increaseTime", [interval.toNumber() + 1])
+                  await network.provider.request({ method: "evm_mine", params: [] })
+                  const tx = await raffle.performUpkeep([])
+                  assert(tx)
+              })
+              it("reverts with Raffle__UpKeepNotNeeded if checkupkeep is false", async function () {
+                  await expect(raffle.performUpkeep([])).to.be.revertedWith(
+                      "Raffle__UpKeepNotNeeded",
+                  )
+              })
+              it("updates the raffle state, emits an event and calls the vrf coordinator", async function () {
+                  await raffle.enterRaffle({ value: raffleEntranceFee })
+                  await network.provider.send("evm_increaseTime", [interval.toNumber() + 1])
+                  await network.provider.request({ method: "evm_mine", params: [] })
+
+                  const txResponse = await raffle.performUpkeep([])
+                  const txReceipt = await txResponse.wait(1)
+
+                  // Find the RequestedRaffleWinner event in the transaction receipt
+                  const requestedRaffleWinnerEvent = txReceipt.events.find(
+                      (event) => event.event === "RequestedRaffleWinner",
+                  )
+
+                  // Check that the event exists and extract the requestId
+                  assert(requestedRaffleWinnerEvent, "RequestedRaffleWinner event not found")
+                  const requestId = requestedRaffleWinnerEvent.args.requestId
+                  const raffleState = await raffle.getRaffleState()
+
+                  assert(requestId.toNumber() > 0)
+                  assert(raffleState.toString() == "1")
+              })
           })
       })
