@@ -5,7 +5,7 @@
 -   Network: Sepolia
 -   Address: 0xF28E77634f557585Aa6A77e3cD2aC2B4f49739Ce
 -   Verified: No
--   Commit:
+-   Commit: [ce5eb8c4a10d264251d6d1a227d93e32f243d9e4](https://github.com/mp-web3/hardhat-smartcontract-lottery/commit/ce5eb8c4a10d264251d6d1a227d93e32f243d9e4)
 
 Updated Patrick Code for Raffle.sol: https://github.com/Cyfrin/foundry-smart-contract-lottery-cu/blob/main/src/Raffle.sol
 
