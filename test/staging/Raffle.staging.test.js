@@ -2,7 +2,7 @@ const { getNamedAccounts, deployments, ethers, network } = require("hardhat")
 const { developmentChains, networkConfig } = require("../../helper-hardhat-config")
 const { assert, expect } = require("chai")
 
-developmentChains.includes(nerwork.name)
+developmentChains.includes(network.name)
     ? describe.skip
     : describe("Raffle Staging Test", async function () {
           let raffle, raffleEntranceFee, deployer
@@ -15,11 +15,8 @@ developmentChains.includes(nerwork.name)
 
           describe("fulfillRandomWords", function () {
               it("works with live Chainlink Keepers and Chainlink VRF, we get a random winner", async function () {
-                  const startingTimeStamp = await raffle.getLatestTimeStamp()
+                  const startingTimeStamp = await raffle.getLastTimeStamp()
                   const accounts = await ethers.getSigners()
-                  // We know it's account zero because only one player is entering the Raffle
-                  const winnerStartingBalance = await accounts[0].getBalance()
-                  // setup listener before we enter the raffle
 
                   await new Promise(async (resolve, reject) => {
                       raffle.once("WinnerPicked", async () => {
@@ -28,8 +25,10 @@ developmentChains.includes(nerwork.name)
                               const lastWinner = await raffle.getLastWinner()
                               const raffleState = await raffle.getRaffleState()
                               const winnerEndingBalance = await accounts[0].getBalance()
-                              const endingTimeStamp = await raffle.getLatestTimeStamp()
-                              const raffleEndingBalance = await ethers.getBalance(raffle.address)
+                              const endingTimeStamp = await raffle.getLastTimeStamp()
+                              const raffleEndingBalance = await ethers.provider.getBalance(
+                                  raffle.address,
+                              )
 
                               // Assertions
                               // Verify players array has been reset
@@ -51,13 +50,11 @@ developmentChains.includes(nerwork.name)
                               reject(e)
                           }
                       })
+
+                      // Enter the raffle
                       await raffle.enterRaffle({ value: raffleEntranceFee })
                       const raffleStartingBalance = await ethers.provider.getBalance(raffle.address)
-                      // We know it's account zero because only one player is entering the Raffle
                       const winnerStartingBalance = await accounts[0].getBalance()
-
-                      // The Promise won't resolve until the listener listen to the event
-                      // or we run into timeout
                   })
               })
           })

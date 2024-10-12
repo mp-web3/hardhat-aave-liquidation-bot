@@ -2,7 +2,7 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/mattia/Code/codecamp/hardhat-smartcontract-lottery/contracts/Raffle.sol": {
-      "lastModificationDate": 1728738705172,
+      "lastModificationDate": 1728745571210,
       "contentHash": "352173e8e5860e094d348594af4fb446",
       "sourceName": "contracts/Raffle.sol",
       "solcConfig": {

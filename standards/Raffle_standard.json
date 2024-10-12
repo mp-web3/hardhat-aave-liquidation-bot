@@ -1,0 +1,25 @@
+{
+    "language": "Solidity",
+    "sources": {
+        "contracts/Raffle.sol": {
+            "content": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.7;\n\nimport {VRFConsumerBaseV2Plus} from \"@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol\";\nimport {VRFV2PlusClient} from \"@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol\";\nimport {AutomationCompatibleInterface} from \"@chainlink/contracts/src/v0.8/automation/interfaces/AutomationCompatibleInterface.sol\";\n\n/**\n * @title A Sample Raffle Contract\n * @author Mattia Papa\n * @notice This contract is for creating a untamperable decentralized lottery\n * @dev Implements Chainlink VRF v2.5 and Chainlink Automation\n */\ncontract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {\n    /* Errors */\n    error Raffle__UpKeepNotNeeded(uint256 currentBalance, uint256 numPlayers, uint256 raffleState);\n    error Raffle__TransferToLastWinnerFailed();\n    error Raffle__SendMoreToEnterRaffle();\n    error Raffle__NotOpen();\n\n    /* Type declarations */\n    enum RaffleState {\n        OPEN,\n        CALCULATING\n    }\n\n    /* State Variables */\n\n    // Chainlink VRF Variables\n    uint256 public immutable i_subscriptionId;\n    // The gas lane to use, which specifies the maximum gas price to bump to.\n    // For a list of available gas lanes on each network,\n    // see https://docs.chain.link/vrf/v2-5/supported-networks\n    bytes32 private immutable i_gasLane; //keyHash\n    uint32 private immutable i_callbackGasLimit;\n    uint16 private constant REQUEST_CONFIRMATIONS = 3;\n    uint32 private constant NUM_WORDS = 1;\n    uint256;\n        s_raffleState = RaffleState.OPEN;\n        s_lastTimeStamp = block.timestamp;\n        emit WinnerPicked(lastWinner);\n        (bool success, ) = lastWinner.call{value: address(this).balance}(\"\");\n        if (!success) {\n            revert Raffle__TransferToLastWinnerFailed();\n        }\n    }\n\n    function getRaffleState() public view returns (RaffleState) {\n        return s_raffleState;\n    }\n\n    function getNumWords() public pure returns (uint256) {\n        return NUM_WORDS;\n    }\n\n    function getRequestConfirmations() public pure returns (uint256) {\n        return REQUEST_CONFIRMATIONS;\n    }\n\n    function getLastWinner() public view returns (address) {\n        return s_lastWinner;\n    }\n\n    function getPlayer(uint256 index) public view returns (address) {\n        return s_players[index];\n    }\n\n    function getLastTimeStamp() public view returns (uint256) {\n        return s_lastTimeStamp;\n    }\n\n    function getInterval() public view returns (uint256) {\n        return i_interval;\n    }\n\n    function getEntranceFee() public view returns (uint256) {\n        return i_entranceFee;\n    }\n\n    function getNumberOfPlayers() public view returns (uint256) {\n        return s_players.length;\n    }\n}"
+        }
+    },
+    "settings": {
+        "optimizer": {
+            "enabled": true,
+            "runs": 200
+        },
+        "outputSelection": {
+            "*": {
+                "*": [
+                    "abi",
+                    "metadata",
+                    "evm.bytecode",
+                    "evm.deployedBytecode",
+                    "evm.methodIdentifiers"
+                ]
+            }
+        }
+    }
+}
