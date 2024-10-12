@@ -181,7 +181,9 @@ const { assert, expect } = require("chai")
                       const accountConnectedRaffle = raffle.connect(accounts[i])
                       await accountConnectedRaffle.enterRaffle({ value: raffleEntranceFee })
                   }
+                  const raffleStartingBalance = await ethers.provider.getBalance(raffle.address)
                   const startingTimeStamp = await raffle.getLastTimeStamp()
+                  const winnerStartingBalance = await accounts[1].getBalance()
 
                   // performUpKeep (we are mocking being chainling keepers)
                   // fulfillRandomWords (mock being the Chainlink VRF)
@@ -194,14 +196,24 @@ const { assert, expect } = require("chai")
                           console.log("WinnerPicked event found!")
                           try {
                               const lastWinner = await raffle.getLastWinner()
-                              console.log(lastWinner)
+                              // By logging winner and accounts we find the winner index which
+                              // happens to be accounts[1]
+                              console.log("winner address:", lastWinner)
+                              console.log("account0 address:", accounts[0].address)
+                              console.log("account1 address:", accounts[1].address)
+                              console.log("account2 address:", accounts[2].address)
+                              console.log("account3 address:", accounts[3].address)
                               const raffleState = await raffle.getRaffleState()
                               const endingTimeStamp = await raffle.getLastTimeStamp()
                               const numPlayers = await raffle.getNumberOfPlayers()
-
+                              const winnerEndingBalance = await accounts[1].getBalance()
                               assert.equal(numPlayers.toString(), "0")
                               assert.equal(raffleState.toString(), "0")
                               assert(endingTimeStamp > startingTimeStamp)
+                              assert.equal(
+                                  winnerEndingBalance.toString(),
+                                  winnerStartingBalance.add(raffleStartingBalance).toString(),
+                              )
                               resolve()
                           } catch (e) {
                               reject(e)
