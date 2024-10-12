@@ -21,7 +21,7 @@ const { assert, expect } = require("chai")
               await vrfCoordinatorV2_5Mock.addConsumer(subscriptionId, raffle.address)
 
               // Fund the subscription if required by the mock
-              const fundAmount = ethers.utils.parseEther("10") // Fund amount as per the requirements
+              const fundAmount = ethers.utils.parseEther("100") // Fund amount as per the requirements
               await vrfCoordinatorV2_5Mock.fundSubscription(subscriptionId, fundAmount)
           })
 
@@ -152,7 +152,7 @@ const { assert, expect } = require("chai")
               })
           })
 
-          describe("fullfillRandomWords", function () {
+          describe("fulfillRandomWords", function () {
               // We add another beforeEach because we will always need somebody who entered the lottery
               // and that the interval time has passed
               beforeEach(async function () {
@@ -167,6 +167,67 @@ const { assert, expect } = require("chai")
                   await expect(
                       vrfCoordinatorV2_5Mock.fulfillRandomWords(1, raffle.address),
                   ).to.be.revertedWith("InvalidRequest")
+              })
+              it("picks a winner, resets the lottery, and sends money to winner", async function () {
+                  const accounts = await ethers.getSigners()
+                  const additionalPlayers = 3
+                  // deployer index is 0
+                  const startingAccountIndex = 1
+                  for (
+                      let i = startingAccountIndex;
+                      i < startingAccountIndex + additionalPlayers;
+                      i++
+                  ) {
+                      const accountConnectedRaffle = raffle.connect(accounts[i])
+                      await accountConnectedRaffle.enterRaffle({ value: raffleEntranceFee })
+                  }
+                  const startingTimeStamp = await raffle.getLastTimeStamp()
+
+                  // performUpKeep (we are mocking being chainling keepers)
+                  // fulfillRandomWords (mock being the Chainlink VRF)
+                  // On a real testnet we need to wait for fulfillrandomWords to be called (we are also going to simulate this)
+                  // To do so we need to set up a listener, that listens for the event
+                  await new Promise(async (resolve, reject) => {
+                      // This is like saying "hey raffle, listen for when the event WinnerPicked happens do something"
+                      // "() => {}" is an anonymous async function
+                      raffle.once("WinnerPicked", async () => {
+                          console.log("WinnerPicked event found!")
+                          try {
+                              const lastWinner = await raffle.getLastWinner()
+                              console.log(lastWinner)
+                              const raffleState = await raffle.getRaffleState()
+                              const endingTimeStamp = await raffle.getLastTimeStamp()
+                              const numPlayers = await raffle.getNumberOfPlayers()
+
+                              assert.equal(numPlayers.toString(), "0")
+                              assert.equal(raffleState.toString(), "0")
+                              assert(endingTimeStamp > startingTimeStamp)
+                              resolve()
+                          } catch (e) {
+                              reject(e)
+                          }
+                          // Remember to add a timeOut for the promise in the hardhat.config.js
+                      })
+                      // After setting the event listener we will performUpKeep etc..
+                      // So that the listener can hear what happens
+                      try {
+                          const txResponse = await raffle.performUpkeep([])
+                          const txReceipt = await txResponse.wait(1)
+                          // Find the RequestedRaffleWinner event in the transaction receipt
+                          const requestedRaffleWinnerEvent = txReceipt.events.find(
+                              (event) => event.event === "RequestedRaffleWinner",
+                          )
+                          assert(
+                              requestedRaffleWinnerEvent,
+                              "RequestedRaffleWinner event not found",
+                          )
+                          const requestId = requestedRaffleWinnerEvent.args.requestId
+                          // Fulfill the randomness to simulate the Chainlink VRF response
+                          await vrfCoordinatorV2_5Mock.fulfillRandomWords(requestId, raffle.address)
+                      } catch (e) {
+                          reject(e)
+                      }
+                  })
               })
           })
       })

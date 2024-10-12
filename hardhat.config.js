@@ -92,7 +92,8 @@ module.exports = {
             },
         ],
     },
+    // This timeout will resolve the promise
     mocha: {
-        timeout: 500000,
+        timeout: 200000, // 200 seconds
     },
 }
