@@ -17,6 +17,7 @@ const networkConfig = {
             "90569123908525426660678444862203092261233996602769345559829783855360620620922",
         callbackGasLimit: "500000",
         interval: "30",
+        latestDeployAddress: "0xF28E77634f557585Aa6A77e3cD2aC2B4f49739Ce",
     },
 }
 
@@ -29,5 +30,5 @@ const testnetChains = ["sepolia"]
 module.exports = {
     networkConfig,
     developmentChains,
-    testnetChains
+    testnetChains,
 }

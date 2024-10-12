@@ -1,5 +1,12 @@
 # Hardhat Smart Contract Lottery
 
+## Latest Raffle.sol deploy
+
+-   Network: Sepolia
+-   Address: 0xF28E77634f557585Aa6A77e3cD2aC2B4f49739Ce
+-   Verified: No
+-   Commit:
+
 Updated Patrick Code for Raffle.sol: https://github.com/Cyfrin/foundry-smart-contract-lottery-cu/blob/main/src/Raffle.sol
 
 Updated Video for smartcontractlottery: https://youtu.be/-1GB6m39-rM?si=DHhy67y5eyBAJp3p&t=50510
@@ -334,3 +341,11 @@ it("updates the raffle state, emits an event and calls the vrf coordinator", asy
 })
 
 ```
+
+## Raffle.staging.test.js
+
+1. Get subscriptionId for Chainlink VRF
+2. Deploy raffle.sol using the subscriptionId
+3. Register the contract with Chainlink VRF and the subscriptionId
+4. Register the contract with Chainlink Keppers/ Chainlink Automation
+5. Run the staging test
