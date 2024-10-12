@@ -151,4 +151,22 @@ const { assert, expect } = require("chai")
                   assert(raffleState.toString() == "1")
               })
           })
+
+          describe("fullfillRandomWords", function () {
+              // We add another beforeEach because we will always need somebody who entered the lottery
+              // and that the interval time has passed
+              beforeEach(async function () {
+                  await raffle.enterRaffle({ value: raffleEntranceFee })
+                  await network.provider.send("evm_increaseTime", [interval.toNumber() + 1])
+                  await network.provider.request({ method: "evm_mine", params: [] })
+              })
+              it("can only be called after performUpKeep", async function () {
+                  await expect(
+                      vrfCoordinatorV2_5Mock.fulfillRandomWords(0, raffle.address),
+                  ).to.be.revertedWith("InvalidRequest")
+                  await expect(
+                      vrfCoordinatorV2_5Mock.fulfillRandomWords(1, raffle.address),
+                  ).to.be.revertedWith("InvalidRequest")
+              })
+          })
       })
