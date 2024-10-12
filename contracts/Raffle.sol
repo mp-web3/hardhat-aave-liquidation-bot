@@ -28,7 +28,7 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
     /* State Variables */
 
     // Chainlink VRF Variables
-    uint256 immutable i_subscriptionId;
+    uint256 public immutable i_subscriptionId;
     // The gas lane to use, which specifies the maximum gas price to bump to.
     // For a list of available gas lanes on each network,
     // see https://docs.chain.link/vrf/v2-5/supported-networks

@@ -246,3 +246,44 @@ To get more precise values go to [Deploy VRFCoordinatorV2_5Mock](https://docs.ch
 ## Create and Fund ChainLink VRF Subscriptions Programatically
 
 For local testing on "hardhat" network is in fact needed to create a subscription programmatically
+
+## Raffle.test.js
+
+Refer to [chai matchers docs](https://ethereum-waffle.readthedocs.io/en/latest/matchers.html#emitting-events) for testing
+
+Example of matching an event:
+
+```
+await expect(token.transfer(walletTo.address, 7))
+  .to.emit(token, 'Transfer')
+  .withArgs(wallet.address, walletTo.address, 7);
+
+```
+
+### Testing Raffle doesn't allow new players to join when it is Not Open
+
+performUpkeep() is the only function that can change the `raffleState` to `RaffleState.CALCULATING`
+We will pretend to be the chainlink Upkeeper and keeper
+checkUpkeep() needs to return `upkeepNeeded == true` in order for
+chainlinak keeper to call `performUpkeep`.
+We need to satisfy (true) the following conditions:
+
+-   bool isOpen = RaffleState.OPEN == s_raffleState;
+-   bool timePassed = ((block.timestamp - s_lastTimeStamp) > i_interval);
+-   bool hasPlayers = (s_players.length > 0);
+-   bool hasBalance = (address(this).balance > 0);
+
+Refer to [hardhat network docs](https://hardhat.org/hardhat-network/docs/reference) when interacting with the chain
+
+In particulare we are going to use [Hardhat network methods](https://hardhat.org/hardhat-network/docs/reference#hardhat-network-methods) and [special testing/debugging methods](https://hardhat.org/hardhat-network/docs/reference#special-testing/debugging-methods) to satisfy the condition:
+
+-   bool timePassed = ((block.timestamp - s_lastTimeStamp) > i_interval);
+
+```
+it("Doesn't allow to enter raffle when raffle is NOT open", async function () {
+    await raffle.enterRaffle({ value: raffleEntranceFee })
+    await network.provider.send("evm_increaseTime", [interval.toNumber() + 1])
+    await network.provider.send("evm_mine", [])
+    await raffle.performUpkeep([])
+})
+```
