@@ -287,3 +287,21 @@ it("Doesn't allow to enter raffle when raffle is NOT open", async function () {
     await raffle.performUpkeep([])
 })
 ```
+
+### testing returns false if there are no players
+
+`await raffle.checkUpKeep([])`
+Instead of actually calling "raffle.checkUpKeep([])" we can simulate a transaction by using callstatic.
+
+#### **callstatic**
+
+`raffle.callStatic.checkUpkeep([])` will return:
+
+-   bool upkeepNeeded
+-   bytes memory /_ performData _/
+
+We can extrapolate `upkeepNeeded` value like so:
+
+```
+const { upkeepNeeded } = await raffle.callStatic.checkUpkeep([])
+```

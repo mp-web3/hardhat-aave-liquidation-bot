@@ -75,4 +75,16 @@ const { assert, expect } = require("chai")
                   )
               })
           })
+
+          describe("checkUpkeep", function () {
+              it("returns false if there are no players", async function () {
+                  await network.provider.send("evm_increaseTime", [interval.toNumber() + 1])
+                  await network.provider.send("evm_mine", [])
+                  // Instead of actually calling "raffle.checkUpKeep([])" we can simulate a transaction
+                  // by using callstatic
+                  //await raffle.checkUpKeep([])
+                  const { upkeepNeeded } = await raffle.callStatic.checkUpkeep([])
+                  assert(!upkeepNeeded)
+              })
+          })
       })
