@@ -28,5 +28,9 @@
         "prettier-plugin-solidity": "^1.4.1",
         "solidity-coverage": "^0.8.0",
         "typechain": "^8.3.0"
+    },
+    "scripts": {
+        "pick": "yarn hardhat run scripts/mockOffChain.js --network localhost",
+        "enter": "yarn hardhat run scripts/enterRaffle.js --network localhost"
     }
 }
