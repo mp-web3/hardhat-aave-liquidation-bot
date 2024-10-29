@@ -6,6 +6,7 @@ require("solidity-coverage")
 require("hardhat-deploy")
 require("hardhat-contract-sizer")
 
+const ARBITRUM_RPC_URL = process.env.ARBITRUM_RPC_URL
 const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL
 const HOLESKY_RPC_URL = process.env.HOLESKY_RPC_URL
 const PRIVATE_KEY = process.env.PRIVATE_KEY
@@ -30,12 +31,13 @@ module.exports = {
             chainId: 11155111,
             blockConfirmations: 6,
         },
-        // holesky: {
-        //     url: HOLESKY_RPC_URL,
-        //     accounts: [PRIVATE_KEY],
-        //     chainId: 17000,
-        //     blockConfirmations: 6,
-        // },
+        arbitrum: {
+            url: ARBITRUM_RPC_URL,
+            // provider: new ethers.providers.JsonRpcProvider(ARBITRUM_RPC_URL),
+            accounts: [PRIVATE_KEY],
+            chainId: 42161,
+            blockConfirmations: 1,
+        },
     },
     namedAccounts: {
         deployer: {

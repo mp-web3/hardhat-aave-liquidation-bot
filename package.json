@@ -6,6 +6,9 @@
     "author": "mp-web3 <mp.web3.t@gmail.com>",
     "license": "MIT",
     "devDependencies": {
+        "@aave/contract-helpers": "^1.30.5",
+        "@aave/math-utils": "^1.30.5",
+        "@bgd-labs/aave-address-book": "^4.2.1",
         "@chainlink/contracts": "1.2.0",
         "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
         "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
@@ -26,11 +29,13 @@
         "hardhat-gas-reporter": "^1.0.8",
         "prettier": "^3.3.3",
         "prettier-plugin-solidity": "^1.4.1",
+        "reflect-metadata": "^0.2.2",
         "solidity-coverage": "^0.8.0",
         "typechain": "^8.3.0"
     },
     "scripts": {
         "pick": "yarn hardhat run scripts/mockOffChain.js --network localhost",
-        "enter": "yarn hardhat run scripts/enterRaffle.js --network localhost"
+        "enter": "yarn hardhat run scripts/enterRaffle.js --network localhost",
+        "fetch-contract-data": "yarn hardhat run scripts/fetchContractData.js --network arbitrum"
     }
 }
